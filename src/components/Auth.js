@@ -12,7 +12,7 @@ export default function Auth() {
             alt="Your Company"
           />
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Sign in to your account
+            Register/Sign in to your account
           </h2>
         </div>
         {!register ? (
@@ -140,7 +140,7 @@ export default function Auth() {
             </div>
           </div>
         )}
-        <div className="flex justify-center mt-2">
+        <div className="flex justify-center mt-4">
           <button
             className="flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             onClick={() => setRegister(!register)}
