@@ -1,7 +1,33 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import AuthContext from '../store/authContext'
+import axios from "axios";
 
 export default function Auth() {
   const [register, setRegister] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const authCtx = useContext(AuthContext)
+
+const url = `http://localhost:4444`
+
+const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const body = {
+        username,
+        password
+    }
+
+    axios.post( register ? `${url}/register`: `${url}/login`,body)
+    .then(res => {
+        console.log(res.data)
+        authCtx.login(res.data.token,res.data.exp,res.data.userId)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
   return (
     <>
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -18,22 +44,24 @@ export default function Auth() {
         {!register ? (
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Email address
+                    Username
                   </label>
                   <div className="mt-1">
                     <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
+                      id="username"
+                      name="username"
+                      type="username"
+                      autoComplete="username"
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                   </div>
                 </div>
@@ -53,6 +81,8 @@ export default function Auth() {
                       autoComplete="current-password"
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                 </div>
@@ -71,8 +101,8 @@ export default function Auth() {
         ) : (
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-              <form className="space-y-6">
-              <div>
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                <div>
                   <label
                     htmlFor="username"
                     className="block text-sm font-medium text-gray-700"
@@ -87,10 +117,12 @@ export default function Auth() {
                       autoComplete="username"
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   <label
                     htmlFor="email"
                     className="block text-sm font-medium text-gray-700"
@@ -107,7 +139,7 @@ export default function Auth() {
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
-                </div>
+                </div> */}
 
                 <div>
                   <label
@@ -124,6 +156,8 @@ export default function Auth() {
                       autoComplete="current-password"
                       required
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                 </div>

@@ -49,9 +49,34 @@ export const AuthContextProvider = (props) => {
   const [userId, setUserId] = useState(null)
 
 
-  const logout = () => {}
+  const logout = useCallback(() => {
+    setToken(null)
+    setUserId(null)
+    localStorage.removeItem('token')
+    localStorage.removeItem('exp')
 
-  const login = () => {}
+
+    if(logoutTimer){
+        clearTimeout(logoutTimer)
+    }
+  },[])
+
+  useEffect(() => {
+    if(localData){
+        logoutTimer = setTimeout(logout,localData.duration)
+    }
+  },[localData,logout])
+
+  const login = (token,exp,userId) => {
+    setToken(token)
+    setUserId(userId)
+    localStorage.setItem('token',token)
+    localStorage.setItem('exp',exp)
+
+    const remainingTime = calculateRemainingTime(exp)
+
+    logoutTimer = setTimeout(logout,remainingTime)
+  }
 
   const contextValue = {
     token,
